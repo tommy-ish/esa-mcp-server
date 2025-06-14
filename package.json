@@ -1,0 +1,48 @@
+{
+	"name": "@tommy-ish/esa-mcp-server",
+	"version": "0.1.0",
+	"description": "MCP server for esa",
+	"scripts": {
+		"build": "tsc",
+		"prepare": "husky"
+	},
+	"keywords": [
+		"esa",
+		"mcp"
+	],
+	"author": {
+		"name": "Tomohiro Ishii",
+		"email": "tommy.ish@icloud.com"
+	},
+	"license": "MIT",
+	"packageManager": "pnpm@10.12.1",
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.12.2",
+		"zod": "^3.25.64"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.29.0",
+		"@tsconfig/node20": "^20.1.6",
+		"@tsconfig/strictest": "^2.0.5",
+		"@types/node": "^24.0.1",
+		"eslint": "^9.29.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.1.0",
+		"prettier": "3.5.3",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.34.0"
+	},
+	"type": "module",
+	"bin": "./build/index.js",
+	"files": [
+		"build"
+	],
+	"repository": "github:tommy-ish/esa-mcp-server",
+	"lint-staged": {
+		"*.ts": [
+			"eslint --fix",
+			"prettier --write --ignore-unknown"
+		],
+		"**/*": "prettier --write --ignore-unknown"
+	}
+}
