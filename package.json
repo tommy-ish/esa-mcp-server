@@ -33,11 +33,16 @@
 		"typescript-eslint": "^8.34.0"
 	},
 	"type": "module",
-	"bin": "./build/index.js",
+	"bin": {
+		"esa-mcp-server": "build/index.js"
+	},
 	"files": [
 		"build"
 	],
-	"repository": "github:tommy-ish/esa-mcp-server",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tommy-ishi/esa-mcp-server.git"
+	},
 	"lint-staged": {
 		"*.ts": [
 			"eslint --fix",
