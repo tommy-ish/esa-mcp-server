@@ -14,7 +14,7 @@ if (!token) {
 
 const server = new McpServer({
 	name: "esa",
-	version: "0.2.0",
+	version: "0.2.1",
 });
 
 type GetPostsOptions = z.infer<typeof GetPostsOptions>;

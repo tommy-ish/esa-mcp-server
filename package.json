@@ -1,6 +1,6 @@
 {
 	"name": "@tommy-ish/esa-mcp-server",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "MCP server for esa",
 	"scripts": {
 		"build": "tsc",
@@ -41,7 +41,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/tommy-ishi/esa-mcp-server.git"
+		"url": "git+https://github.com/tommy-ish/esa-mcp-server.git"
 	},
 	"lint-staged": {
 		"*.ts": [
