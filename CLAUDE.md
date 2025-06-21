@@ -2,56 +2,73 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Overview
+
+This is an MCP (Model Context Protocol) server for esa, a documentation platform. The server exposes esa's API through MCP tools and resources, allowing AI assistants to fetch posts, create posts, and access esa content.
+
 ## Development Commands
 
-- `pnpm build` - Compile TypeScript to JavaScript in `build/` directory
-- `pnpm prepare` - Run husky setup for git hooks
-- `eslint --fix src/**/*.ts` - Lint and auto-fix TypeScript files
-- `prettier --write --ignore-unknown src/**/*.ts` - Format TypeScript files
+- **Build**: `pnpm build` or `npm run build` - Compiles TypeScript to JavaScript in the `build/` directory
+- **Linting**: Project uses ESLint with TypeScript ESLint rules. Lint-staged is configured to auto-fix on commit
+- **Formatting**: Prettier is configured and runs automatically via lint-staged on commit
+- **Package Manager**: Uses pnpm (specified in packageManager field)
 
-## Environment Setup
-
-Required environment variables:
-
-- `ESA_API_TOKEN` - Bearer token for esa API authentication
-- `DEFAULT_TEAM_NAME` - Default esa team name (e.g., "docs")
-
-## Architecture Overview
-
-This is an MCP (Model Context Protocol) server that bridges AI assistants with the esa wiki platform.
+## Architecture
 
 ### Core Structure
 
-- `src/index.ts` - MCP server setup and tool definitions using `@modelcontextprotocol/sdk`
-- `src/post.ts` - esa API client functions and TypeScript interfaces
-- `build/` - Compiled JavaScript output (git-tracked)
+- **Single file architecture**: All code is in `src/index.ts`
+- **MCP Server**: Built using `@modelcontextprotocol/sdk`
+- **Transport**: Uses StdioServerTransport for communication
+- **Authentication**: Requires `ESA_ACCESS_TOKEN` environment variable
 
-### MCP Server Implementation
+### MCP Implementation
 
-The server defines three main tools:
+The server registers:
 
-1. `get-posts` - Search and list posts with pagination/filtering
-2. `get-post` - Retrieve individual post by number with full content
-3. `create-post` - Create new posts with metadata
+1. **Tools**:
 
-### Key Patterns
+   - `get-posts`: Fetches esa posts with search, filtering, and pagination
+   - `create-post`: Creates new esa posts
 
-- All parameters use Zod schemas for validation exported from `index.ts`
-- API functions in `post.ts` return `null` on errors rather than throwing
-- The server uses stdio transport for MCP communication
-- Tool responses follow MCP content format with `type: "text"`
+2. **Resources**:
+   - `post`: Resource template for individual posts at `esa://{team_name}/posts/{post_number}`
 
-### esa API Integration
+### Key Functions
 
-- Base URL: `https://api.esa.io/v1/teams/{team_name}`
-- Authentication via Bearer token in Authorization header
-- All requests include error handling with console logging
-- Post creation sends data as `{ post: {...} }` JSON payload
+- `getPosts()`: Handles esa API calls for fetching posts with comprehensive query parameters
+- `getPost()`: Fetches individual posts by team name and post number
+- `createPost()`: Creates new posts via esa API
 
-## Type System
+### Validation & Types
 
-The codebase uses strict TypeScript configuration with:
+- Uses Zod for runtime validation and type inference
+- Comprehensive schemas for all API parameters including pagination, sorting, filtering
+- Type-safe parameter handling with `z.infer<typeof Schema>`
 
-- `@tsconfig/strictest` and `@tsconfig/node20` presets
-- Zod schemas define runtime validation and TypeScript types
-- Interface definitions for esa API responses in `post.ts`
+### Error Handling
+
+- Validates environment variables on startup
+- Structured error responses in MCP tool handlers
+- Proper HTTP error handling with esa API error messages
+
+## Configuration
+
+- **TypeScript**: Strict mode enabled with comprehensive compiler options
+- **Module System**: ES modules (`"type": "module"`)
+- **Target**: ES2023 with Node.js Next module resolution
+- **Binary**: Executable at `build/index.js`
+
+## Environment Setup
+
+Required environment variable:
+
+- `ESA_ACCESS_TOKEN`: esa API access token for authentication
+
+## esa API Integration
+
+Base URL: `https://api.esa.io`
+
+- Uses Bearer token authentication
+- Implements esa's posts API endpoints (/v1/teams/{team}/posts)
+- Supports full range of esa query parameters (search, include, sort, pagination)
